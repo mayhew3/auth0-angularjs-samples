@@ -6,26 +6,26 @@
     .module('app')
     .service('authService', authService);
 
-  authService.$inject = ['$state', 'angularAuth0', '$timeout'];
+  authService.$inject = ['$state', '$timeout', 'lock'];
 
-  function authService($state, angularAuth0, $timeout) {
+  function authService($state, $timeout, lock) {
 
     function login() {
-      angularAuth0.authorize();
+      lock.show();
     }
     
     function handleAuthentication() {
-      angularAuth0.parseHash(function(err, authResult) {
+      lock.on('authenticated', function(authResult) {
         if (authResult && authResult.accessToken && authResult.idToken) {
+          console.log('Authenticated!', authResult);
           setSession(authResult);
-          $state.go('home');
-        } else if (err) {
-          $timeout(function() {
-            $state.go('home');
-          });
-          console.log(err);
-          alert('Error: ' + err.error + '. Check the console for further details.');
         }
+      });
+      lock.on('authorization_error', function(err) {
+        console.log(err);
+        alert(
+          'Error: ' + err.error + '. Check the console for further details.'
+        );
       });
     }
 

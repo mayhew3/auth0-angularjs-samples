@@ -3,21 +3,21 @@
   'use strict';
 
   angular
-    .module('app', ['auth0.auth0', 'ui.router'])
+    .module('app', ['auth0.lock', 'ui.router'])
     .config(config);
 
   config.$inject = [
     '$stateProvider',
     '$locationProvider',
     '$urlRouterProvider',
-    'angularAuth0Provider'
+    'lockProvider'
   ];
 
   function config(
     $stateProvider,
     $locationProvider,
     $urlRouterProvider,
-    angularAuth0Provider
+    lockProvider
   ) {
 
     $stateProvider
@@ -35,7 +35,7 @@
       });;
 
     // Initialization for the angular-auth0 library
-    angularAuth0Provider.init({
+    lockProvider.init({
       clientID: AUTH0_CLIENT_ID,
       domain: AUTH0_DOMAIN,
       responseType: 'token id_token',
